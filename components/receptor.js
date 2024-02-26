@@ -28,7 +28,7 @@ const Receptor = () => {
   
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Header />
+      <Header title ="Collect"/>
       <DropdownSection />
       <Entry onAdd={handleAddEntry} />
       <Dashboard entries={entries} totalBags={totalBags} totalWeight={totalWeight}  onRemove={handleRemoveEntry} />

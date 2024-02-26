@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
 
-const Header = ({ client, location }) => {
+const Header = ({ client, location, title="Default" }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -12,7 +12,7 @@ const Header = ({ client, location }) => {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.headerTitle}>Pick Up</Text>
+          <Text style={styles.headerTitle}>{title}</Text>
           <Image
             source={require('./logo.png')}
             style={styles.userIcon}
