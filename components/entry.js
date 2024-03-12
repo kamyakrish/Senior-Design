@@ -30,34 +30,17 @@ const Entry = ({ onAdd }) => {
     }
   };
 
-  const getColorStyle = (colorValue) => {
-    switch (colorValue) {
-      case 'blue':
-        return { color: 'blue' };
-      case 'yellow':
-        return { color: 'yellow' };
-      case 'brown':
-        return { color: 'brown' };
-      default:
-        return { color: 'black' }; 
-    }
-  };
-
   return (
     <View style={styles.dropdownSectionContainer}>
       <View style={styles.dropdownSection}>
         
         {/* Color of Bag */}
-        <View style={styles.dropdownContainer}>
+        <View style={styles.dropdownContainer1}>
           <Text style={styles.label}>Color</Text>
           <RNPickerSelect
             onValueChange={(value) => setSelectedColor(value)}
             items={colorItems}
-            style={{
-              ...pickerSelectStyles,
-              inputIOS: { ...pickerSelectStyles.inputIOS, ...getColorStyle(selectedColor) },
-              inputAndroid: { ...pickerSelectStyles.inputAndroid, ...getColorStyle(selectedColor) },
-            }}
+            style={pickerSelectStyles}
             value={selectedColor}
             placeholder={{ label: 'Color', value: null }}
             useNativeAndroidPickerStyle={false} 
@@ -65,7 +48,7 @@ const Entry = ({ onAdd }) => {
         </View>
 
         {/* Number of Bags */}
-        <View style={styles.dropdownContainer}>
+        <View style={styles.dropdownContainer2}>
           <Text style={styles.label}>Count</Text>
           <RNPickerSelect
             onValueChange={(value) => setSelectedBags(value)}
@@ -77,8 +60,8 @@ const Entry = ({ onAdd }) => {
         </View>
 
         {/* Weight Input */}
-        <View style={styles.dropdownContainer}>
-  <Text style={styles.label}>Weight</Text>
+        <View style={styles.dropdownContainer1}>
+  <Text style={styles.weightlabel}>Weight (KG)</Text>
   <View style={styles.weightInputContainer}>
     <TextInput
       style={styles.weightInput}
@@ -87,7 +70,6 @@ const Entry = ({ onAdd }) => {
       placeholder="20"
       keyboardType="numeric"
     />
-    <Text style={styles.kgLabel}>KG</Text>
   </View>
 </View>
       </View>
@@ -105,47 +87,45 @@ const Entry = ({ onAdd }) => {
 const styles = StyleSheet.create({
   dropdownSectionContainer: {
     marginTop:20,
-    backgroundColor: '#e3f2fd', // Distinct light color for the background
-    padding: 10, // Add some padding around the entire container for spacing
-    borderRadius: 5, // Optional: Add a slight border radius for a softer look
+    backgroundColor: '#e3f2fd',
+    padding: 10,
+    borderRadius: 5,
+    flexDirection: 'row', // Add flexDirection here
+    alignItems: 'center', 
   },
   dropdownSection: {
+    flex: 1, 
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-   
+    
   },
-  dropdownContainer: {
- 
-    flex: 1, // Adjust this value as needed, was 1 before
+  dropdownContainer1: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+
+  dropdownContainer2: {
+    flex: 0.8,
     marginHorizontal: 5,
   },
   weightInputContainer: {
     flexDirection: 'row',
-     
+    flex:1,
   },
   weightInput: {
-    // The flex is set to 1 to take up all available space in the container
-    flex: 0.6, // This will make the input expand to fill the space
+    flex: 0.6,
     borderWidth: 1,
     borderColor: '#000',
     borderRadius: 5,
     paddingVertical: 12,
     paddingHorizontal: 10,
-    // marginRight is removed so the KG label can be right next to the input
   },
-  kgLabel: {
-    paddingVertical: 12,
-    paddingHorizontal: 5,
-  },
-  
   label: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 3,
   },
-
-  addButtonContainer:{
+  addButtonContainer: {
     alignItems: 'flex-end',
     padding: 10,
   },
@@ -172,7 +152,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 4,
     color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30,
   },
   inputAndroid: {
     fontSize: 16,
@@ -182,7 +162,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'purple',
     borderRadius: 8,
     color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30,
   },
 });
 
