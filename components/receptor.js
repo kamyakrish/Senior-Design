@@ -24,6 +24,10 @@ const Receptor = () => {
     setTotalBags(prevTotalBags => prevTotalBags - entryToRemove.bags);
     setTotalWeight(prevTotalWeight => prevTotalWeight - entryToRemove.weight);
   };
+
+  const goBack = () => {
+    navigation.goBack(); // Navigate back to the previous screen
+  };
   
   
   return (
