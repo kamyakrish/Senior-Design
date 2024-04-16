@@ -1,24 +1,46 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Dimensions, Alert } from 'react-native';
 
-const Dashboard = ({ entries, totalBags, totalWeight, onRemove }) => {
+const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation }) => {
   
+  const DashboardHeader = () => (
+    <View style={styles.headerRow}>
+       <Text style={styles.headerText}>Color</Text>
+      <Text style={styles.headerText}>Count</Text>
+      <Text style={styles.headerText}>Weight</Text>
+    </View>
+  );
+  
+  const DashboardEntry = ({ item, onRemove }) => (
+    <View style={styles.entryRow}>
+      <Text style={styles.entryText}>{item.color}</Text>
+      <Text style={styles.entryText}>{item.bags}</Text>
+      <Text style={styles.entryText}>{`${item.weight} KG`}</Text>
+      <TouchableOpacity onPress={onRemove} style={styles.removeButton}>
+        <Text style={styles.removeButtonText}>X</Text>
+      </TouchableOpacity>
+    </View>
+  );
   const handleCancel = () => {
     Alert.alert(
       "Cancel",
       "Are you sure you want to cancel?",
       [
         {
-          text: "Cancel",
+          text: "No",
           style: "cancel"
         },
         {
-          text: "OK",
-          onPress: () => console.log("Canceled"),
+          text: "Yes",
+          onPress: () => {
+            console.log("Canceled");
+            navigation.navigate('Home'); // This will navigate to the Home screen after confirmation
+          },
         }
       ]
     );
   };
+  
 
   const handleRemove = (index) => {
     Alert.alert(
@@ -37,39 +59,57 @@ const Dashboard = ({ entries, totalBags, totalWeight, onRemove }) => {
     );
   };
 
+  
+
   return (
     <View style={styles.container}>
       <View style={styles.headerLine} />
       <View style={styles.listContainer}>
-        <FlatList
-          data={entries}
-          keyExtractor={(item, index) => 'entry-' + index}
-          renderItem={({ item, index }) => (
-            <View style={styles.entry}>
-              <Text style={styles.entryText}>{item.bags} {item.color} Bags, {item.weight} KG</Text>
-              <TouchableOpacity onPress={() => handleRemove(index)} style={styles.removeButton}>
-                <Text style={styles.removeButtonText}>X</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+      <DashboardHeader />
+      <FlatList
+  data={entries}
+  keyExtractor={(item, index) => 'entry-' + index}
+  renderItem={({ item, index }) => (
+    <DashboardEntry item={item} onRemove={() => handleRemove(index)} />
+  )}
+/>
       </View>
       <View style={styles.totalsContainer}>
         <Text style={styles.total}>Total Bags: {totalBags}</Text>
         <Text style={styles.total}>Total Weight: {totalWeight} KG</Text>
       </View>
       <View style={styles.buttonsContainer}>
+      <TouchableOpacity style={styles.addButton}>
+          <Text style={styles.buttonText}>SUBMIT</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
           <Text style={styles.buttonText}>CANCEL</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.buttonText}>SUBMIT</Text>
-        </TouchableOpacity>
+
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: '#e3e3e3', // You can change the color as needed
+  },
+  entryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 10,
+    marginBottom: 5,
+  },
+  headerText: {
+    flex: 1,
+    fontWeight: 'bold',
+    // Add more styling as needed for header text
+  },
   container: {
     flex: 1, // Take up all available space
     marginTop: 60,
@@ -93,11 +133,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     padding: 10,
-    marginBottom: 5,
+    marginVertical: 5, // Add vertical margin for space between entries
+    marginHorizontal: 10, // Add horizontal margin for space from screen edges
     borderRadius: 5,
+    elevation: 2, // Add elevation for a subtle shadow (optional)
   },
   entryText: {
     fontSize: 16,
+    flex: 1, // Ensure text takes up the available space
+    textAlign: 'left', // Align text to the left
+    marginRight: 10, // Add some space before the remove button
   },
   removeButton: {
     marginLeft: 10,

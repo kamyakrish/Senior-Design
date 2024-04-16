@@ -1,28 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import calls from '../services/calls';
 
-const DropdownSection = () => {
+const DropdownSection = ({onClientSelect, onLocationSelect }) => {
   const [selectedClient, setSelectedClient] = useState(null);
+  const [clients, setClients] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
 
-  const clientItems = [
-    { label: 'User A', value: 'userA' },
-    // ... Add other clients here
-  ];
 
   const locationItems = [
     { label: 'Location A', value: 'locA' },
-    // ... Add other locations here
+  
   ];
+
+  useEffect(() => {
+    calls.fetchClients((clientData) => {
+      console.log('Fetched client data:', clientData);
+      const formattedClients = clientData.map(client => ({
+        label: client.client_name, 
+        value: client.id
+      }));
+      setClients(formattedClients);
+    });
+  }, []);
+
+  const onClientValueChange = (clientId) => {
+    const id = parseInt(clientId)
+    const selectedClient = clients.find(client => client.value === id);
+    setSelectedClient(selectedClient); 
+    console.log('Selected client:', selectedClient);
+    if (selectedClient && selectedClient.locations) {
+      const locationItems = selectedClient.locations.map(location => ({
+        label: location.name,
+        value: location.id, 
+      }));
+      setLocations(locationItems);
+    } else {
+      setLocations([]);
+    }
+  };
+
+
+
+
 
   return (
     <View style={styles.dropdownSection}>
       <View style={styles.dropdownContainer}>
         <Text style={styles.dropdownLabel}>Client:</Text>
         <RNPickerSelect
-          onValueChange={(value) => setSelectedClient(value)}
-          items={clientItems}
+          onValueChange={(value) => {
+            console.log('Value selected from RNPickerSelect:', value); // This should log the selected client's ID
+            onClientValueChange(value);
+          }}
+          items={clients} 
           style={pickerSelectStyles}
           placeholder={{ label: "Select a client", value: null }}
         />
@@ -31,11 +64,11 @@ const DropdownSection = () => {
       <View style={styles.dropdownContainer}>
         <Text style={styles.dropdownLabel}>Pickup Location:</Text>
         <RNPickerSelect
-          onValueChange={(value) => setSelectedLocation(value)}
-          items={locationItems}
-          style={pickerSelectStyles}
-          placeholder={{ label: "Select a location", value: null }}
-        />
+    onValueChange={onLocationSelect}
+    items={locations}
+    style={pickerSelectStyles}
+    placeholder={{ label: "Select a location", value: null }}
+  />
       </View>
     </View>
   );

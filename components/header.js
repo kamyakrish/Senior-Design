@@ -14,7 +14,7 @@ const Header = ({ client, location, title="Default" }) => {
           />
           <Text style={styles.headerTitle}>{title}</Text>
           <Image
-            source={require('./logo.png')}
+            source={require('./Group 3.png')}
             style={styles.userIcon}
           />
         </View>

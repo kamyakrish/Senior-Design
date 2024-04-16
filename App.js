@@ -1,11 +1,11 @@
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, { useState, createContext, useContext,useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Receptor from './components/receptor';
 import Classify from './components/classify'; 
 import PastCollections from './components/pastcollections';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import calls from './services/calls';
+import calls from './services/calls'; 
 
 // Create a context to manage the logged-in user
 const UserContext = createContext();
@@ -43,23 +43,39 @@ const Home = ({ navigation }) => {
 const LoginPage = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [users, setUsers] = useState()
-
-  useEffect(() => {
+  const [users, setUsers] = useState([])
+  
+   useEffect(() => {
     const getUsers = () => {
       calls.fetchUsers(setUsers)
-      console.log("CALL MADE")
-    }
-
-    getUsers()
+       console.log("CALL MADE")
+      }
+     getUsers()
   }, [])
+
+
 
   const handlePersonSelect = (person) => {
     setUser(person);
     setShowDropdown(false);
-    // Navigate to the Home screen after selecting a login
     navigation.navigate('Home');
   };
+
+  const displayUserChoices = () => {
+    if(users){
+      return users.map((user) => 
+        
+        <TouchableOpacity
+          key={user.id}
+          style={styles.dropdownItem}
+          onPress={() => handlePersonSelect(`${user.first_name} ${user.last_name}`)}
+        >
+          <Text>{user.first_name} {user.last_name}</Text>
+        </TouchableOpacity>
+      
+    )
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -70,19 +86,19 @@ const LoginPage = ({ navigation }) => {
         <Text>Select Person</Text>
       </TouchableOpacity>
 
-      {showDropdown && users && (
+      {showDropdown && users ?
         <View style={styles.dropdownMenu}>
-          {users.map((person) => (
+            {displayUserChoices()}
+          {/*{users.map((person) => 
             <TouchableOpacity
-              key={person}
+              key={person.id}
               style={styles.dropdownItem}
               onPress={() => handlePersonSelect(`${person.first_name} ${person.last_name}`)}
             >
               <Text>{person.first_name} {person.last_name}</Text>
-            </TouchableOpacity>
-          ))}
+          </TouchableOpacity> */}
         </View>
-      )}
+      : <></> }
     </View>
   );
 };
@@ -100,8 +116,11 @@ const App = () => {
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Login" component={LoginPage} />
           <Stack.Screen name="Home" component={Home} />
-          {/* Replace the following placeholders with your actual components */}
-          <Stack.Screen name="Collect" component={Receptor} />
+          <Stack.Screen 
+            name="Collect" 
+            component={Receptor} 
+            options={{ headerShown: false }} 
+          />
           <Stack.Screen name="Classify" component={Classify} />
           <Stack.Screen name="PastCollections" component={PastCollections} />
         </Stack.Navigator>

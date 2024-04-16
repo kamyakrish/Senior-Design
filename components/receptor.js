@@ -5,10 +5,12 @@ import Header from './header';
 import DropdownSection from './picker';
 import Entry from './entry'
 import Dashboard from './dashboard';
-const Receptor = () => {
+const Receptor = ({navigation}) => {
   const [entries, setEntries] = useState([]);
   const [totalBags, setTotalBags] = useState(0);
   const [totalWeight, setTotalWeight] = useState(0);
+  const [selectedClient, setSelectedClient] = useState(null);
+const [selectedLocation, setSelectedLocation] = useState(null);
   const handleAddEntry = (color, bags, weight) => {
     const newEntry = { color, bags: parseInt(bags), weight: parseInt(weight) };
     setEntries([...entries, newEntry]);
@@ -24,8 +26,8 @@ const Receptor = () => {
     setTotalBags(prevTotalBags => prevTotalBags - entryToRemove.bags);
     setTotalWeight(prevTotalWeight => prevTotalWeight - entryToRemove.weight);
   };
-
-  const goBack = () => {
+  
+const goBack = () => {
     navigation.goBack(); // Navigate back to the previous screen
   };
   
@@ -33,9 +35,13 @@ const Receptor = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <Header title ="Collect"/>
-      <DropdownSection />
-      <Entry onAdd={handleAddEntry} />
-      <Dashboard entries={entries} totalBags={totalBags} totalWeight={totalWeight}  onRemove={handleRemoveEntry} />
+      <DropdownSection
+  onClientSelect={setSelectedClient}
+  onLocationSelect={setSelectedLocation}
+/>
+      <Entry onAdd={handleAddEntry} selectedClient={selectedClient}
+  selectedLocation={selectedLocation} />
+      <Dashboard entries={entries} totalBags={totalBags} totalWeight={totalWeight}  onRemove={handleRemoveEntry} navigation={navigation} />
     
     </SafeAreaView>
   );

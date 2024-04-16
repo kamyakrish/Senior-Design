@@ -14,24 +14,24 @@ const getUsers = (setUsers) =>
 }
 
 const fetchUsers = (setUsers) =>{
-    fetch('https://express-auv3rzs3sa-uw.a.run.app/users/getusers')
+    fetch('https://express-auv3rzs3sa-uw.a.run.app/api/user/')
     .then((response) => {
         return response.json()
     })
     .then((response) => {
         console.log(response)
-        setUsers(response)
+        setUsers(response.users)
     })
 }
 
 const fetchClients = (setClients) =>{
-    fetch('https://express-auv3rzs3sa-uw.a.run.app/mobile/getclients')
+    fetch('https://express-auv3rzs3sa-uw.a.run.app/api/client/')
     .then((response) => {
         return response.json()
     })
     .then((response) => {
         console.log(response)
-        setClients(response)
+        setClients(response.clients)
     })
 }
 
