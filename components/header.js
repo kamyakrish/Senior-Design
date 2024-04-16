@@ -26,15 +26,15 @@ const Header = ({ client, location, title="Default" }) => {
 
 const styles = StyleSheet.create({
     safeArea: {
-      backgroundColor: 'white', // Or any other color that matches your header
+      backgroundColor: 'white', 
     },
     container: {
       backgroundColor: '#FFF',
     },
     headerLine: {
-      height: 10, // Height for the blue line
-      backgroundColor: '#0038A8', // Blue line
-      width: '100%', // Set to 100% to extend across the screen width
+      height: 10, 
+      backgroundColor: '#0038A8', 
+      width: '100%', 
     },
     headerContent: {
       flexDirection: 'row',
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
       padding: 10,
     },
     logo: {
-      width: 166, // Width of the logo
-      height: 76, // Height of the logo
+      width: 166, 
+      height: 76, 
       flexShrink: 0,
     },
     headerTitle: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
     userIcon: {
       width: 30,
-      height: 30, // Dimensions for the user icon
+      height: 30, 
     },
   });
   

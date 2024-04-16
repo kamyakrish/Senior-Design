@@ -20,9 +20,10 @@ const DropdownSection = ({onClientSelect, onLocationSelect }) => {
       console.log('Fetched client data:', clientData);
       const formattedClients = clientData.map(client => ({
         label: client.client_name, 
-        value: client.id
+        value: client.id,
+        locations:client.locations
       }));
-      setClients(formattedClients);
+      setClients(formattedClients)
     });
   }, []);
 
@@ -31,12 +32,13 @@ const DropdownSection = ({onClientSelect, onLocationSelect }) => {
     const selectedClient = clients.find(client => client.value === id);
     setSelectedClient(selectedClient); 
     console.log('Selected client:', selectedClient);
-    if (selectedClient && selectedClient.locations) {
+    if (selectedClient) {
       const locationItems = selectedClient.locations.map(location => ({
         label: location.name,
         value: location.id, 
       }));
       setLocations(locationItems);
+      console.log('Locations for selected client:', locationItems);
     } else {
       setLocations([]);
     }
