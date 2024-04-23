@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet,Button } from 'react-native';
+import { View, Text, StyleSheet,Button,TextInput } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import calls from '../services/calls';
 
@@ -24,7 +24,7 @@ const Contact = ({ clientId }) => {
 
     useEffect(() => {
         fetchClientContactInfo();
-    }, [clientId]); // Re-fetch when clientId changes
+    }, [clientId]); 
 
     const toggleVisibility = () => {
         setIsVisible(!isVisible);
@@ -48,6 +48,7 @@ const DropdownSection = ({ onClientSelect, onLocationSelect }) => {
     const [selectedClient, setSelectedClient] = useState(null);
     const [clients, setClients] = useState([]);
     const [locations, setLocations] = useState([]);
+    
 
     useEffect(() => {
         calls.fetchClients((clientData) => {
@@ -74,6 +75,9 @@ const DropdownSection = ({ onClientSelect, onLocationSelect }) => {
             setLocations([]);
         }
     };
+    const toggleNotes = () => {
+      setShowNotes(!showNotes);
+  };
 
     return (
         <View style={styles.mainContainer}>
@@ -104,6 +108,8 @@ const DropdownSection = ({ onClientSelect, onLocationSelect }) => {
             </View>
            
             {selectedClient && <Contact style={styles.Contact}clientId={selectedClient.value} />}
+           
+            
         </View>
     );
 };
@@ -135,6 +141,9 @@ const styles = StyleSheet.create({
         color: 'black',
         alignItems:'center'
     },
+   
+
+    
 });
 
 
@@ -147,7 +156,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 4,
     color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30, 
   },
   inputAndroid: {
     fontSize: 12,
@@ -157,7 +166,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: 'purple',
     borderRadius: 8,
     color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30, 
   },
 });
 

@@ -34,12 +34,37 @@ const fetchClients = (setClients) =>{
         setClients(response.clients)
     })
 }
+const postPickups = async (payload) => {
+    console.log('Received payload in postPickups:', payload); // This should log the structured payload you saw earlier
+  
+    const url = 'https://express-auv3rzs3sa-uw.a.run.app/api/pickup/';
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      const data = await response.json();
+      console.log('Response from the server:', data);
+      return data;
+    } catch (error) {
+      console.error('Error in postPickups:', error);
+    }
+  };
+  
+
+  
 
 
 const calls = {
     getUsers,
     fetchUsers,
-    fetchClients
+    fetchClients,
+    postPickups
 }
 
 export default calls

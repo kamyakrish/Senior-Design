@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert ,Button} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
 const Entry = ({ onAdd, selectedClient, selectedLocation }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedBags, setSelectedBags] = useState(null);
   const [weight, setWeight] = useState('');
+ 
 
-  const isAddButtonDisabled = !selectedClient || !selectedLocation || !selectedColor || !selectedBags || weight === '';
+  const isAddButtonDisabled = !selectedClient || !selectedLocation || !selectedColor || !selectedBags ;
 
   const colorItems = [
     { label: 'Blue', value: 'Blue' },
@@ -47,6 +48,8 @@ const Entry = ({ onAdd, selectedClient, selectedLocation }) => {
     setWeight('');
   };
   
+
+
   console.log(selectedClient, selectedLocation);
   return (
     <View style={styles.container}>
@@ -98,12 +101,12 @@ const Entry = ({ onAdd, selectedClient, selectedLocation }) => {
         disabled={isAddButtonDisabled}>
         <Text style={styles.addButtonText}>ADD</Text>
       </TouchableOpacity>
+      
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  // General container and layout styles
   container: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -129,22 +132,22 @@ const styles = StyleSheet.create({
   colorPickerContainer: {
     flex: 1.25,
     justifyContent: 'center',
-    marginRight: 5, // Space between inputs
+    marginRight: 5, 
   },
   countPickerContainer: {
     flex: 1,
     justifyContent: 'center',
-    marginHorizontal: 5, // Space around input
+    marginRight: 5,
   },
   weightInputContainer: {
     flex: 1.25,
-    justifyContent: 'center', // Center in the available space
-    marginRight: 10, // Space before the add button
+    justifyContent: 'center', 
+    marginRight: 5, 
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 6, // Space between label and picker/input
+    marginBottom: 6, 
   },
   weightLabel: {
     fontSize: 16,
@@ -158,7 +161,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     color: 'black',
-    marginTop: 6, // Match space between label and picker/input as with others
+    marginTop: 6, 
   },
   addButton: {
     backgroundColor: '#4CAF50',
@@ -169,13 +172,14 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   disabledButton: {
-    backgroundColor: '#ccc', // Gray out the button when disabled
+    backgroundColor: '#ccc', 
   },
   addButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
+  
 });
 
 const pickerSelectStyles = StyleSheet.create({
@@ -187,7 +191,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: '#999',
     borderRadius: 6,
     color: 'black',
-    paddingRight: 30, // to ensure the dropdown arrow doesn't overlap the text
+    paddingRight: 30, 
   },
   inputAndroid: {
     fontSize: 16,
@@ -197,8 +201,8 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: '#999',
     borderRadius: 6,
     color: 'black',
-    paddingRight: 30, // to ensure the dropdown arrow doesn't overlap the text
-  },
+    paddingRight: 30, 
+  }
 });
 
 

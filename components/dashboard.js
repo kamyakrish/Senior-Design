@@ -1,14 +1,17 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Dimensions, Alert } from 'react-native';
+import React , {useState} from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Alert ,Button,TextInput} from 'react-native';
+import calls from '../services/calls';
 
-const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation }) => {
+const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation,selectedClient,selectedLocation }) => {
+  const [showNotes, setShowNotes] = useState(false);  
+  const [notes, setNotes] = useState('');
   
   const DashboardHeader = () => (
     <View style={styles.headerRow}>
        <Text style={styles.headerText}>Color</Text>
       <Text style={styles.headerText}>Count</Text>
       <Text style={styles.headerText}>Weight</Text>
-      <View style={{ width: 50, /* This width should match the removeButton's width */ }}></View>
+      <View style={{ width: 30, }}></View>
     </View>
   );
   
@@ -35,7 +38,7 @@ const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation }) =>
           text: "Yes",
           onPress: () => {
             console.log("Canceled");
-            navigation.navigate('Home'); // This will navigate to the Home screen after confirmation
+            navigation.navigate('Home'); 
           },
         }
       ]
@@ -60,6 +63,32 @@ const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation }) =>
     );
   };
 
+  const toggleNotes = () => {
+    setShowNotes(!showNotes);
+};
+
+const handleSubmit = async () => {
+  console.log("handleSubmit: ", selectedClient, selectedLocation); // Additional logging
+  if (!selectedClient || !selectedLocation) {
+    Alert.alert("Error", "Please select a client and location.");
+    return;
+  }
+  const payload = {
+    pickup: {
+      client: selectedClient,
+      location: selectedLocation,
+      status: 'U', 
+      bags: entries.map(entry => ({
+        color: entry.color,
+        weight: entry.weight.toString(),
+      })),
+    }
+  };
+  console.log('Payload before postPickups:', JSON.stringify(payload, null, 2))
+  await calls.postPickups(payload);
+};
+
+console.log("Dashboard: ",selectedClient, selectedLocation);
   
 
   return (
@@ -79,8 +108,20 @@ const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation }) =>
         <Text style={styles.total}>Total Bags: {totalBags}</Text>
         <Text style={styles.total}>Total Weight: {totalWeight} KG</Text>
       </View>
+      <Button title="Add Notes" onPress={toggleNotes} />
+            {showNotes && (
+                <TextInput
+                    style={styles.notesInput}
+                    onChangeText={setNotes}
+                    value={notes}
+                    placeholder="Type your notes here"
+                    multiline
+                    numberOfLines={4}  // Adjust as needed
+                />
+            )}
       <View style={styles.buttonsContainer}>
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity onPress={handleSubmit}
+      style={styles.addButton}>
           <Text style={styles.buttonText}>SUBMIT</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleCancel} style={styles.cancelButton}>
@@ -88,6 +129,8 @@ const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation }) =>
         </TouchableOpacity>
 
       </View>
+
+     
     </View>
   );
 };
@@ -96,7 +139,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
-    backgroundColor: '#e3e3e3', // You can change the color as needed
+    backgroundColor: '#e3e3e3', 
   },
   entryRow: {
     flexDirection: 'row',
@@ -112,7 +155,7 @@ const styles = StyleSheet.create({
     textAlign:'center'
   },
   container: {
-    flex: 1, // Take up all available space
+    flex: 1, 
     marginTop: 60,
     backgroundColor: '#f7f7f7',
   },
@@ -121,20 +164,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#0038A8',
   },
   listContainer: {
-    flex: 1, // Allow this container to grow and fill available space
+    flex: 1, 
   },
   headerLine: {
-    height: 10, // Height for the blue line
-    backgroundColor: '#0038A8', // Blue line
-    width: '100%', // Set to 100% to extend across the screen width
+    height: 10, 
+    backgroundColor: '#0038A8', 
+    width: '100%',
   },
 
   entryText: {
-    flex: 1, // Ensure text takes up the available space
+    flex: 1,
     textAlign:'center',
   },
   removeButton: {
-    width:50,
+    width:30,
     backgroundColor: 'red',
     padding: 5,
     borderRadius: 5,
@@ -177,6 +220,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  notesInput: {
+    fontSize: 16,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+    textAlignVertical: 'top',
+    flexDirection: 'row',
   },
 });
 

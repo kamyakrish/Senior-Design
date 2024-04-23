@@ -1,4 +1,3 @@
-// MainScreen.js
 import React ,{useState}from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import Header from './header';
@@ -29,7 +28,7 @@ const [selectedLocation, setSelectedLocation] = useState(null);
   };
   
 const goBack = () => {
-    navigation.goBack(); // Navigate back to the previous screen
+    navigation.goBack(); 
   };
   
   
@@ -49,7 +48,15 @@ const goBack = () => {
 />
 
 
-      <Dashboard entries={entries} totalBags={totalBags} totalWeight={totalWeight}  onRemove={handleRemoveEntry} navigation={navigation} />
+      <Dashboard 
+      entries={entries}
+      totalBags={totalBags}
+      totalWeight={totalWeight} 
+      onRemove={handleRemoveEntry}
+      navigation={navigation}
+      selectedClient={selectedClient}
+      selectedLocation={selectedLocation}
+      />
     
     </SafeAreaView>
   );
