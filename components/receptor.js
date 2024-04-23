@@ -5,6 +5,7 @@ import Header from './header';
 import DropdownSection from './picker';
 import Entry from './entry'
 import Dashboard from './dashboard';
+
 const Receptor = ({navigation}) => {
   const [entries, setEntries] = useState([]);
   const [totalBags, setTotalBags] = useState(0);
@@ -35,12 +36,19 @@ const goBack = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <Header title ="Collect"/>
+      
       <DropdownSection
   onClientSelect={setSelectedClient}
   onLocationSelect={setSelectedLocation}
 />
-      <Entry onAdd={handleAddEntry} selectedClient={selectedClient}
-  selectedLocation={selectedLocation} />
+
+<Entry 
+  onAdd={handleAddEntry} 
+  selectedClient={selectedClient}
+  selectedLocation={selectedLocation} 
+/>
+
+
       <Dashboard entries={entries} totalBags={totalBags} totalWeight={totalWeight}  onRemove={handleRemoveEntry} navigation={navigation} />
     
     </SafeAreaView>

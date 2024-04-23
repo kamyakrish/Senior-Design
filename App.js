@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import calls from './services/calls'; 
 
+
 // Create a context to manage the logged-in user
 const UserContext = createContext();
 

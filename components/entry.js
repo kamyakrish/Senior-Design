@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
-const Entry = ({ onAdd,selectedClient, selectedLocation }) => {
+const Entry = ({ onAdd, selectedClient, selectedLocation }) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedBags, setSelectedBags] = useState(null);
   const [weight, setWeight] = useState('');
+
+  const isAddButtonDisabled = !selectedClient || !selectedLocation || !selectedColor || !selectedBags || weight === '';
 
   const colorItems = [
     { label: 'Blue', value: 'Blue' },
@@ -16,14 +18,16 @@ const Entry = ({ onAdd,selectedClient, selectedLocation }) => {
 
   const getColorByValue = (value) => {
     switch (value) {
-      case 'blue':
+      case 'Blue':
         return '#5884E0';
-      case 'yellow':
+      case 'Yellow':
         return '#F4C343';
-      case 'brown':
+      case 'Brown':
         return '#7A621D';
+      case 'Grey':
+        return '#999999'; 
       default:
-        return '#999999'; // Default color
+        return '#999999'; 
     }
   };
 
@@ -37,144 +41,139 @@ const Entry = ({ onAdd,selectedClient, selectedLocation }) => {
   ];
 
   const handleAdd = () => {
-    if (selectedColor && selectedBags && weight && selectedClient && selectedLocation) {
-      onAdd(selectedColor, selectedBags, weight);
-      setSelectedColor(null);
-      setSelectedBags(null);
-      setWeight('');
-    } else {
-      // Use Alert.alert to display the warning to the user
-      Alert.alert(
-        "Missing Information",
-        "Please select all fields including client and location",
-        [
-          { text: "OK" }
-        ]
-      );
-    }
-  };;
-
+    onAdd(selectedColor, selectedBags, weight);
+    setSelectedColor(null);
+    setSelectedBags(null);
+    setWeight('');
+  };
+  
+  console.log(selectedClient, selectedLocation);
   return (
     <View style={styles.container}>
-      {/* Inputs Container */}
       <View style={styles.inputsContainer}>
-        {/* Color Picker */}
         <View style={styles.colorPickerContainer}>
           <Text style={styles.label}>Color</Text>
           <RNPickerSelect
-    onValueChange={(value) => setSelectedColor(value)}
-    items={colorItems}
-    style={{
-      ...pickerSelectStyles,
-      inputAndroid: {
-        ...pickerSelectStyles.inputAndroid,
-        color: getColorByValue(selectedColor),
-      },
-      inputIOS: {
-        ...pickerSelectStyles.inputIOS,
-        color: getColorByValue(selectedColor),
-      },
-    }}
-    value={selectedColor}
-    placeholder={{ label: 'Color', value: null }}
-    useNativeAndroidPickerStyle={false}
-  />
+            onValueChange={(value) => setSelectedColor(value)}
+            items={colorItems}
+            style={{
+              inputAndroid: {
+                ...pickerSelectStyles.inputAndroid,
+                color: getColorByValue(selectedColor),
+              },
+              inputIOS: {
+                ...pickerSelectStyles.inputIOS,
+                color: getColorByValue(selectedColor),
+              },
+            }}
+            value={selectedColor}
+            placeholder={{ label: 'Select a color', value: null }}
+            useNativeAndroidPickerStyle={false}
+          />
         </View>
-
-        {/* Count Picker */}
         <View style={styles.countPickerContainer}>
           <Text style={styles.label}>Count</Text>
           <RNPickerSelect
-            onValueChange={setSelectedBags}
+            onValueChange={(value) => setSelectedBags(value)}
             items={bagsItems}
             style={pickerSelectStyles}
             value={selectedBags}
             placeholder={{ label: 'Select number of bags', value: null }}
           />
         </View>
-
-        {/* Weight Input */}
         <View style={styles.weightInputContainer}>
-          <Text style={styles.wlabel}>Weight (KG)</Text>
+          <Text style={styles.weightLabel}>Weight (KG)</Text>
           <TextInput
             style={styles.weightInput}
-            onChangeText={setWeight}
+            onChangeText={(text) => setWeight(text.replace(/[^0-9.]/g, ''))} // Replace any character that is not a number or a dot
             value={weight}
-            placeholder="20"
-            keyboardType="numeric"
-          />
+            placeholder="Enter weight"
+            keyboardType="numeric" 
+            />
         </View>
       </View>
-
-      {/* Add Button */}
-      <View style={styles.addButtonContainer}>
-        <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
-          <Text style={styles.addButtonText}>ADD</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity 
+        onPress={handleAdd} 
+        style={[styles.addButton, isAddButtonDisabled && styles.disabledButton]} 
+        disabled={isAddButtonDisabled}>
+        <Text style={styles.addButtonText}>ADD</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  // General container and layout styles
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    padding: 12,
     backgroundColor: '#e3f2fd',
-    borderRadius: 5,
+    borderRadius: 6,
     marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   inputsContainer: {
     flexDirection: 'row',
-    flex: 1, // Allow this container to expand
-    marginRight: 10,
-
+    flex: 1,
+    marginRight: 12,
   },
   colorPickerContainer: {
-    flex: 1.25, // Allows the color picker to be wider
+    flex: 1.25,
+    justifyContent: 'center',
+    marginRight: 5, // Space between inputs
   },
   countPickerContainer: {
-    flex: 0.75, // Assigns less space than color picker
-    marginLeft: 5,
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: 5, // Space around input
   },
   weightInputContainer: {
-    flex: 0.5, // Assigns less space than color picker
-    marginLeft: 5,
-  },
-  weightInput: {
-    borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 5,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    width: '100%',
+    flex: 1.25,
+    justifyContent: 'center', // Center in the available space
+    marginRight: 10, // Space before the add button
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 3,
+    marginBottom: 6, // Space between label and picker/input
   },
-  addButtonContainer: {
-    padding: 10,
-  },
-  wlabel: {
-    fontSize: 11,
-    marginBottom: 3,
+  weightLabel: {
+    fontSize: 16,
     fontWeight: 'bold',
-
+  },
+  weightInput: {
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    color: 'black',
+    marginTop: 6, // Match space between label and picker/input as with others
   },
   addButton: {
-    backgroundColor: 'green',
+    backgroundColor: '#4CAF50',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc', // Gray out the button when disabled
   },
   addButtonText: {
     color: 'white',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
@@ -183,23 +182,24 @@ const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
     paddingVertical: 8,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
+    borderColor: '#999',
+    borderRadius: 6,
     color: 'black',
-    paddingRight: 30,
+    paddingRight: 30, // to ensure the dropdown arrow doesn't overlap the text
   },
   inputAndroid: {
     fontSize: 16,
     paddingHorizontal: 8,
     paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#999',
+    borderRadius: 6,
     color: 'black',
-    paddingRight: 30,
+    paddingRight: 30, // to ensure the dropdown arrow doesn't overlap the text
   },
 });
+
 
 export default Entry;

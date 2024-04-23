@@ -8,6 +8,7 @@ const Dashboard = ({ entries, totalBags, totalWeight, onRemove, navigation }) =>
        <Text style={styles.headerText}>Color</Text>
       <Text style={styles.headerText}>Count</Text>
       <Text style={styles.headerText}>Weight</Text>
+      <View style={{ width: 50, /* This width should match the removeButton's width */ }}></View>
     </View>
   );
   
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
   headerText: {
     flex: 1,
     fontWeight: 'bold',
-    // Add more styling as needed for header text
+    textAlign:'center'
   },
   container: {
     flex: 1, // Take up all available space
@@ -127,25 +128,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#0038A8', // Blue line
     width: '100%', // Set to 100% to extend across the screen width
   },
-  entry: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 10,
-    marginVertical: 5, // Add vertical margin for space between entries
-    marginHorizontal: 10, // Add horizontal margin for space from screen edges
-    borderRadius: 5,
-    elevation: 2, // Add elevation for a subtle shadow (optional)
-  },
+
   entryText: {
-    fontSize: 16,
     flex: 1, // Ensure text takes up the available space
-    textAlign: 'left', // Align text to the left
-    marginRight: 10, // Add some space before the remove button
+    textAlign:'center',
   },
   removeButton: {
-    marginLeft: 10,
+    width:50,
     backgroundColor: 'red',
     padding: 5,
     borderRadius: 5,
@@ -153,6 +142,7 @@ const styles = StyleSheet.create({
   removeButtonText: {
     color: '#fff',
     fontSize: 16,
+    textAlign:'center'
   },
   totalsContainer: {
     paddingVertical: 10,
